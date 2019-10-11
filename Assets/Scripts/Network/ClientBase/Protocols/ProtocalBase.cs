@@ -68,10 +68,5 @@ namespace ClientBase
         {
             return false;
         }
-
-        public virtual void AppendCrc()
-        {
-
-        }
     }    
 }

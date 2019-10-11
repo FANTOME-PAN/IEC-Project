@@ -264,7 +264,7 @@ public partial class Unit : MonoBehaviour
             return;
         }
 
-        if (GameCtrl.IsOnlineGame && IsLocal)
+        if (GameCtrl.IsOnlineGame)
         {
             lock (deathRequestMutex)
             {
@@ -272,7 +272,6 @@ public partial class Unit : MonoBehaviour
                     if (IsLocal && info.CurrentValue <= 0)
                     {
                         sendDeathRequest = true;
-                        Death();
                         // send death request
                     }
             }
@@ -302,7 +301,6 @@ public partial class Unit : MonoBehaviour
             LogOffBuff(buffs[0]);
         Debug.Log(gameObject.name + " has died.");
         DeathEvnt.Trigger();
-        Gamef.Destroy(gameObject);
         //注销单位
         lock (GameDB.unitPool)
             Gamef.UnitClear(this);

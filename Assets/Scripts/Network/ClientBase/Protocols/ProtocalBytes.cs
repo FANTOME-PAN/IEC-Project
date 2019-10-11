@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UnityEngine;
 
 namespace ClientBase
 {
@@ -61,20 +60,19 @@ namespace ClientBase
         
         public override int GetNumber()
         {
-            return GetByte(0);
+            return GetInt(0);
         }
 
         #region 字符串相关
         public void AddString(string str)
         {
-            short len = (short)str.Length;
+            Int32 len = str.Length;
             byte[] lenBytes = BitConverter.GetBytes(len);
             byte[] strBytes = Encoding.UTF8.GetBytes(str);
             if (bytes == null)
                 bytes = lenBytes.Concat(strBytes).ToArray();
             else
                 bytes = bytes.Concat(lenBytes).Concat(strBytes).ToArray();
-            Debug.Log(GetDesc());
             return;
         }
 
@@ -84,13 +82,13 @@ namespace ClientBase
             //若为空则返回空
             if (bytes == null) return "";
             //若起始位置后不满四位（存放字节长度的四位字节），则返回
-            if (bytes.Length < start + sizeof(short)) return "";
-            Int32 strLen = BitConverter.ToInt16(bytes, start);
+            if (bytes.Length < start + sizeof(Int32)) return "";
+            Int32 strLen = BitConverter.ToInt32(bytes, start);
             //若数据包长度未达到标记的值，则返回空
-            if (bytes.Length < start + sizeof(short) + strLen) return "";
+            if (bytes.Length < start + sizeof(Int32) + strLen) return "";
 
-            string str = Encoding.UTF8.GetString(bytes, start + sizeof(short), strLen);
-            end = start + sizeof(short) + strLen;
+            string str = Encoding.UTF8.GetString(bytes, start + sizeof(Int32), strLen);
+            end = start + sizeof(Int32) + strLen;
             return str;
         }
 
@@ -325,24 +323,5 @@ namespace ClientBase
             return "";
         }
         #endregion
-
-        /// <summary>
-        /// Append crc code. If length > 144 use crc-16 else use crc-8.
-        /// </summary>
-        public override void AppendCrc()
-        {
-            if (bytes.Length > 144)
-            {
-                CRC16 crc = new CRC16(bytes, false);
-                crc.CRC_16();
-                bytes = crc.AppendCRC();
-            }
-            else
-            {
-                CRC8 crc = new CRC8(bytes, false);
-                crc.CRC_8();
-                bytes = crc.AppendCRC();
-            }
-        }
     }
 }

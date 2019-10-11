@@ -19,7 +19,7 @@ namespace ClientBase
         public static ProtocolBytes GetProtocolHead(ProtoName protoName)
         {
             ProtocolBytes proto = new ProtocolBytes();
-            proto.AddByte((byte)protoName);
+            proto.AddShort((byte)protoName);
             return proto;
         }
 
