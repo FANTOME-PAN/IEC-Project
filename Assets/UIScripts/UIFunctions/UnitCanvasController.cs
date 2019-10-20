@@ -7,10 +7,11 @@ public class UnitCanvasController : MonoBehaviour
 {
     public Canvas canvas;
     public Text nameText;
-    
+
     private void LateUpdate()
     {
-        canvas.transform.forward = Camera.main.transform.forward;
+        if (Camera.main != null)
+            canvas.transform.forward = Camera.main.transform.forward;
     }
 
     public void SetName(string name)

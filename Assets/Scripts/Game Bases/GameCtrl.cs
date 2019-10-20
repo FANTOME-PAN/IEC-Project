@@ -18,6 +18,7 @@ public partial class GameCtrl : MonoBehaviour
     #endregion
 
     #region 实时公有信息
+    public Canvas overlayCanvas;
     public LogoPanel logoPanel;
     public LoadingPanel loadingPanel;
     public static bool CursorOnGUI = false;
@@ -109,6 +110,11 @@ public partial class GameCtrl : MonoBehaviour
 
     private void Update()
     {
+        if(overlayCanvas.renderMode == RenderMode.ScreenSpaceCamera && overlayCanvas.worldCamera == null)
+        {
+            overlayCanvas.worldCamera = Camera.main;
+        }
+
         CheckInputForSkillTable();
 
         EventMgr.UpdateEvent.OnTrigger();

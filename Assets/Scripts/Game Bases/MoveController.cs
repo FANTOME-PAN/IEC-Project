@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-//using Valve.VR;
+using Valve.VR;
 
 public class MoveController : MonoBehaviour
 {
@@ -9,9 +9,9 @@ public class MoveController : MonoBehaviour
         private set;
     }
 
-    //public SteamVR_Input_Sources handType;
-    //public SteamVR_Action_Vector2 PadPos;
-    //public SteamVR_Action_Boolean pressPad;
+    public SteamVR_Input_Sources handType = SteamVR_Input_Sources.RightHand;
+    public SteamVR_Action_Vector2 PadPos = SteamVR_Input.GetVector2Action("TouchPadPos");
+    public SteamVR_Action_Boolean pressPad = SteamVR_Input.GetBooleanAction("PressPad");
 
     public Vector3 EyePosition => mover.EyeTransform.position;
     public Vector3 EyeEulerAngles => mover.EyeTransform.eulerAngles;
@@ -85,8 +85,6 @@ public class MoveController : MonoBehaviour
         //    }
         //    camFwd = CameraGroupController.Instance.transform.forward;
         //}
-        //else
-        //{
         if (GameCtrl.CursorOnGUI)
         {
             h = 0;
@@ -94,8 +92,17 @@ public class MoveController : MonoBehaviour
         }
         else
         {
-            h = InputMgr.GetHorizontalAxis();
-            v = InputMgr.GetVerticalAxis();
+            if (GetPressPad())
+            {
+                Vector2 pos = PadPos.GetAxis(handType);
+                h = Mathf.Clamp(pos.x * 5f, -1f, 1f);
+                v = Mathf.Clamp(pos.y * 5f, -1f, 1f);
+            }
+            else
+            {
+                h = 0f;
+                v = 0f;
+            }
         }
         camFwd = CameraGroupController.Instance.transform.forward;
         //}
@@ -133,8 +140,8 @@ public class MoveController : MonoBehaviour
         }
     }
 
-    //bool GetPressPad()
-    //{
-    //    return pressPad.GetState(handType);
-    //}
+    bool GetPressPad()
+    {
+        return pressPad.GetState(handType);
+    }
 }
