@@ -64,7 +64,7 @@ public partial class GameCtrl
             else
             {
                 StartCreatePlayer(0);
-                Gamef.DelayedExecution(delegate { Crosshair.SetState(false); }, 0.7f);
+                Gamef.DelayedExecution(delegate { Crosshair.SetState(true); }, 0.7f);
                 Gamef.DelayedExecution(loadingPanel.StopLoading, 0.2f);
             }
             IsLoading = false;
